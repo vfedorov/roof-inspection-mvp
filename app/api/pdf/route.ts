@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
         const executablePath = isLocalWindows
             ? localChromePath
-            : process.env.VERCEL_CHROMIUM_PATH || (await chromium.executablePath());
+            : (await chromium.executablePath());
 
         const browser = await puppeteer.launch(
             isLocalWindows
