@@ -102,17 +102,6 @@ http://localhost:3000
 
 ---
 
-## 🔮 Possible Future Improvements
-
-* Undo/Redo functionality
-* Clear all annotations
-* Zoom & pan controls
-* Multi-page PDF support
-* Better annotation palette
-* History of inspections
-
----
-
 ## 👤 Author
 
 **Vladimir** — Senior Full-Stack Developer
