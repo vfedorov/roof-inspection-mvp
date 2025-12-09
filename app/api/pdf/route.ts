@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
             isLocalWindows
                 ? {
                     headless: true,
-                    executablePath: localChromePath, // 👈 ДОБАВЛЕНО
+                    executablePath: localChromePath,
                 }
                 : {
                     args: chromium.args,
