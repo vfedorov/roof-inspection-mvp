@@ -9,28 +9,30 @@ export async function POST(req: NextRequest) {
         const { image, address, roofType, notes } = await req.json();
 
         const html = `
-      <html lang="en">
-        <body style="font-family: sans-serif; padding: 20px;">
-          <h1>Inspection Report</h1>
-          <p><strong>Address:</strong> ${address}</p>
-          <p><strong>Roof Type:</strong> ${roofType}</p>
-          <p><strong>Notes:</strong> ${notes}</p>
-          <img src="${image}" style="width: 500px; margin-top: 20px;" alt="generated" />
-        </body>
-      </html>
-    `;
+          <html lang="en">
+            <body style="font-family: sans-serif; padding: 20px;">
+              <h1>Inspection Report</h1>
+              <p><strong>Address:</strong> ${address}</p>
+              <p><strong>Roof Type:</strong> ${roofType}</p>
+              <p><strong>Notes:</strong> ${notes}</p>
+              <img src="${image}" style="width: 500px; margin-top: 20px;" alt="generated" />
+            </body>
+          </html>
+        `;
 
-        const isLocal = !process.env.VERCEL;
+        const isLocalWindows =
+            process.platform === "win32" && !process.env.VERCEL;
+
+        const localChromePath =
+            "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 
         const browser = await puppeteer.launch(
-            isLocal
+            isLocalWindows
                 ? {
                     headless: true,
-                    args: [],
-                    executablePath: undefined, // Puppeteer скачает свой Chrome
+                    executablePath: localChromePath, // 👈 ДОБАВЛЕНО
                 }
                 : {
-                    // ✔ serverless режим (Vercel)
                     args: chromium.args,
                     executablePath: await chromium.executablePath(),
                     headless: true,
