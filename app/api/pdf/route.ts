@@ -26,15 +26,19 @@ export async function POST(req: NextRequest) {
         const localChromePath =
             "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 
+        const executablePath = isLocalWindows
+            ? localChromePath
+            : process.env.VERCEL_CHROMIUM_PATH || (await chromium.executablePath());
+
         const browser = await puppeteer.launch(
             isLocalWindows
                 ? {
                     headless: true,
-                    executablePath: localChromePath,
+                    executablePath,
                 }
                 : {
                     args: chromium.args,
-                    executablePath: await chromium.executablePath(),
+                    executablePath,
                     headless: true,
                 }
         );
