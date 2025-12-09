@@ -101,24 +101,41 @@ export default function HomePage() {
 
     const generatePDF = async () => {
         const canvas = fabricCanvas.current;
-        if (!canvas) return;
+        if (!canvas) {
+            console.error("Canvas not initialized");
+            return;
+        }
 
         setLoadingPDF(true);
 
-        const image = canvas.toDataURL({ format: "png", multiplier: 1 });
+        try {
+            const image = canvas.toDataURL({ format: "png", multiplier: 1 });
 
-        const res = await fetch("/api/pdf", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image, address, roofType, notes }),
-        });
+            const res = await fetch("/api/pdf", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image, address, roofType, notes }),
+            });
 
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
+            if (!res.ok) {
+                const errorDetails = await res.text();
+                console.error("PDF generation failed:", errorDetails);
+                alert("Failed to generate PDF. Please try again.");
+                return;
+            }
 
-        window.open(url, "_blank");
-        setLoadingPDF(false);
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+
+            window.open(url, "_blank");
+        } catch (err) {
+            console.error("Unexpected PDF error:", err);
+            alert("An unexpected error occurred while generating the PDF.");
+        } finally {
+            setLoadingPDF(false);
+        }
     };
+
 
     return (
         <div className="space-y-8">
